@@ -1,0 +1,89 @@
+
+
+				SALARIO DOTTORI
+
+
+This query combines salary data from the Salary table with doctor names from the Doc table, providing a comprehensive view of doctor salaries.
+
+
+
+CREATE TABLE #TempSalarioI(Salario Decimal (10,2), SalarioDottori varchar(30))
+
+insert into #TempSalarioDottori 
+select s.Salario, D.Nome +' ' + D.Cognome as SalarioDottori
+From Salario S
+JOIN Dottori D on S.ID_Dottore = D.ID_Dottore
+
+
+
+				SALARIO INFERMIERI
+
+
+
+This script creates a temporary table to hold salary information for nurses by combining data from the Salary table with nurse names from the Nurses table.
+
+
+
+CREATE TABLE #TempSalarioInfermieri (
+    Salario Decimal (10,2),
+    SalarioInfermiere varchar(30)
+);
+
+INSERT INTO #TempSalarioInfermieri (Salario, SalarioInfermiere)
+SELECT s.Salario, i.Nome + ' ' + i.Cognome as SalarioInfermiere
+FROM Salario s
+JOIN Infermieri i ON s.ID_Infermiere = i.ID_Infermiere;
+
+
+
+				Interventi
+
+
+
+Creates a temporary table #TempInterventi to store intervention details, including ID, patient and doctor names, intervention type, date, and time, retrieved from the Interventi, Pazienti, and Dottori tables.
+
+
+CREATE table #TempInterventi(id_Intervento int,
+NomePaziente varchar(50)
+,NomeDottore varchar(50)
+,Tipo_Intervento varchar(50)
+,Data date
+,Ora time)
+
+Insert INTO #TempInterventi(id_Intervento, NomePaziente,NomeDottore,Tipo_Intervento,Data,Ora)
+Select i.ID_Intervento as IDIntervento, p.Nome + ' '+ p.Cognome as NomePaziente,D.Nome +' '+ D.Cognome as NomeDottore, i.Descrizione, i.Data, i.Ora as Ora
+From Interventi i
+Join Pazienti p on i.ID_Paziente = p.ID_Paziente
+Join Dottori d on i.ID_Dottore = d.ID_Dottore
+
+
+
+
+
+				Appuntamenti
+
+
+Creates a temporary table #TEMPAppuntamenti to store appointment details, including ID, patient and doctor names, date, and time, retrieved from the Appuntamenti, Pazienti, and Dottori tables.
+
+
+CREATE TABLE #TEMPAppuntamenti (
+    id_Appuntamento int, 
+    NomePaziente varchar(50),
+    NomeDottore varchar(50),
+    Data date,
+    Ora time
+);
+
+INSERT INTO #TEMPAppuntamenti (id_Appuntamento, NomePaziente, NomeDottore, Data, Ora)
+SELECT 
+    a.ID_Appuntamento,
+    p.Nome + ' ' + p.Cognome as NomePaziente,
+    d.Nome + ' ' + d.Cognome as NomeDottore,
+    a.Data,
+    a.Ora
+FROM 
+    Appuntamenti a
+JOIN 
+    Pazienti p ON a.ID_Paziente = p.ID_Paziente
+JOIN 
+    Dottori d ON a.ID_Dottore = d.ID_Dottore;
