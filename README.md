@@ -1,4 +1,4 @@
-Hospital Database Project
+
 This project aims to create a comprehensive database schema for managing hospital-related information. It includes tables for doctors, patients, appointments, interventions, and more.
 
 Table of Contents
